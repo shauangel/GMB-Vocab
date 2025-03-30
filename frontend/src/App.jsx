@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function VocabApp() {
   const [view, setView] = useState("home");
@@ -10,49 +9,48 @@ export default function VocabApp() {
     if (view === "list") {
       fetch("/api/words")
         .then((res) => res.json())
-        .then((data) => setWordList(data));
+        .then((data) => {
+          const sorted = data.sort((a, b) => a.word.localeCompare(b.word));
+          setWordList(sorted);
+        });
     }
   }, [view]);
 
   const renderContent = () => {
     switch (view) {
       case "home":
-        return <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>Welcome to GMB-Vocabs</h2>;
+        return <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>Welcome to GMB-Vocabs</h2>;
+
       case "list":
-        return (
+        return selectedWord ? (
+          <div className="card">
+            <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>Word: {selectedWord.word}</h3>
+            <p>Type: {selectedWord.type}</p>
+            <ul>
+              {selectedWord.sentences.map((s, idx) => (
+                <li key={idx}>{s}</li>
+              ))}
+            </ul>
+            <button style={{ marginTop: "1rem" }} onClick={() => setSelectedWord(null)}>
+              Back to list
+            </button>
+          </div>
+        ) : (
           <div>
-            {selectedWord ? (
-              <div className="card">
-                <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>Word: {selectedWord.word}</h3>
-                <p>Type: {selectedWord.type}</p>
-                <ul>
-                  {selectedWord.sentences.map((s, idx) => (
-                    <li key={idx}>{s}</li>
-                  ))}
-                </ul>
-                <button style={{ marginTop: '1rem' }} onClick={() => setSelectedWord(null)}>
-                  Back to list
-                </button>
-              </div>
-            ) : (
-              <div>
-                {wordList.map((word) => (
-                  <button
-                    key={word.word}
-                    className="option"
-                    onClick={() => setSelectedWord(word)}
-                  >
-                    {word.word}
-                  </button>
-                ))}
-              </div>
-            )}
+            {wordList.map((word) => (
+              <button key={word.word} className="option" onClick={() => setSelectedWord(word)}>
+                {word.word}
+              </button>
+            ))}
           </div>
         );
+
       case "insert":
         return <InsertView onAdd={() => setView("list")} />;
+
       case "quiz":
         return <QuizView />;
+
       default:
         return null;
     }
@@ -60,12 +58,15 @@ export default function VocabApp() {
 
   return (
     <div className="container">
+      {/* 左側導覽按鈕區 */}
       <div className="sidebar">
-        <button onClick={() => setView("home")}>home</button>
-        <button onClick={() => setView("list")}>list</button>
+        <button onClick={() => { setView("home"); setSelectedWord(null); }}>home</button>
+        <button onClick={() => { setView("list"); setSelectedWord(null); }}>list</button>
         <button onClick={() => setView("insert")}>insert</button>
         <button onClick={() => setView("quiz")}>quiz</button>
       </div>
+
+      {/* 右側內容顯示區 */}
       <div className="main">
         {renderContent()}
       </div>
@@ -110,7 +111,9 @@ function InsertView({ onAdd }) {
       <div>
         <label>Type:</label>
         <select value={type} onChange={(e) => setType(e.target.value)}>
-          {types.map((t) => <option key={t} value={t}>{t}</option>)}
+          {types.map((t) => (
+            <option key={t} value={t}>({t})</option>
+          ))}
         </select>
       </div>
       <div>
@@ -118,7 +121,9 @@ function InsertView({ onAdd }) {
           Generate Sentences
         </button>
         <ul>
-          {sentences.map((s, idx) => <li key={idx}>{s}</li>)}
+          {sentences.map((s, idx) => (
+            <li key={idx}>{s}</li>
+          ))}
         </ul>
       </div>
       <button onClick={handleAdd} className="primary">add</button>

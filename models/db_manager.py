@@ -32,7 +32,19 @@ def insert_one_word(obj):
 
 
 def get_all_words():
-    cursor = WORD_COLLECTION.find({})
+    try:
+        cursor = WORD_COLLECTION.find({})
+    except Exception as e:
+        print(e.__context__)
+    result = [r for r in cursor]
+    return result
+
+
+def get_filtered_words(n):
+    try:
+        cursor = WORD_COLLECTION.find({"word": {"$regex": f"^{n}"}})
+    except Exception as e:
+        print(e.__context__)
     result = [r for r in cursor]
     return result
 
@@ -61,6 +73,6 @@ if __name__ == "__main__":
     }
 
     # print(insert_one_word(test))
-    data = get_all_words()
+    data = get_filtered_words('f')
     print(data)
 

@@ -32,6 +32,14 @@ def add_word(word, word_type):
     return word_entry
 
 
+def get_list(n):
+    if n != '':
+        data = db.get_filtered_words(n.lower())
+    else:
+        data = db.get_all_words()
+    return sorted(data, key=lambda x: x['word'])
+
+
 if __name__ == "__main__":
     print("Word Manager Model")
     # add_word('cat', 'n')

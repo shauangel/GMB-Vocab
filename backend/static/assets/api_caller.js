@@ -1,3 +1,4 @@
+const backend_uri = "http://127.0.0.1:8080";
 
 async function search(word) {
     const response = await fetch('/api/search?w=' + word);

@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
+import QuizView from "./QuizView";
+import InsertView from "./InsertView";
+
 import catImage from './meow_hackpsu.jpg';
+
 
 export default function VocabApp() {
   const [view, setView] = useState("home");
@@ -97,72 +101,3 @@ export default function VocabApp() {
   );
 }
 
-function InsertView({ onAdd }) {
-  const [word, setWord] = useState("");
-  const [type, setType] = useState("noun");
-
-  const types = [
-    "noun", "pronoun", "verb", "adjective", "adverb",
-    "preposition", "conjunction", "interjection"
-  ];
-
-  const handleAdd = () => {
-    fetch("/add_word", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ word, type })
-    }).then(() => onAdd());
-  };
-
-  return (
-    <div className="card">
-      <div>
-        <label>New word:</label>
-        <input value={word} onChange={(e) => setWord(e.target.value)} />
-      </div>
-      <div>
-        <label>Type:</label>
-        <select value={type} onChange={(e) => setType(e.target.value)}>
-          {types.map((t) => (
-            <option key={t} value={t}>({t})</option>
-          ))}
-        </select>
-      </div>
-      <button onClick={handleAdd} className="primary">add</button>
-    </div>
-  );
-}
-
-function QuizView() {
-  const [quiz, setQuiz] = useState([]);
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    fetch("/get_quiz")
-      .then(res => res.json())
-      .then(data => setQuiz(data.result));
-  }, []);
-
-  const current = quiz[index];
-
-  return (
-    <div className="card">
-      {current ? (
-        <div>
-          <p>{current.question.replace(current.word, "____")}</p>
-          <div>
-            {current.options.map((opt, i) => (
-              <button key={i} className="option">{opt}</button>
-            ))}
-          </div>
-          <div className="quiz-buttons">
-            <button onClick={() => setIndex((i) => Math.max(0, i - 1))}>Previous</button>
-            <button onClick={() => setIndex((i) => Math.min(quiz.length - 1, i + 1))}>Next</button>
-          </div>
-        </div>
-      ) : (
-        <p>Loading quiz...</p>
-      )}
-    </div>
-  );
-}

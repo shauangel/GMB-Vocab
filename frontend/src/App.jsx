@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import catImage from './meow_hackpsu.jpg';
 
-
 export default function VocabApp() {
   const [view, setView] = useState("home");
   const [wordList, setWordList] = useState([]);
@@ -9,10 +8,10 @@ export default function VocabApp() {
 
   useEffect(() => {
     if (view === "list") {
-      fetch("/api/words")
+      fetch("/get_words")
         .then((res) => res.json())
         .then((data) => {
-          const sorted = data.sort((a, b) => a.word.localeCompare(b.word));
+          const sorted = data.result.sort((a, b) => a.word.localeCompare(b.word));
           setWordList(sorted);
         });
     }
@@ -22,7 +21,7 @@ export default function VocabApp() {
     switch (view) {
       case "home":
         return (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <h2 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "1rem" }}>
               Welcome to GMB-Vocabs
             </h2>
@@ -30,14 +29,13 @@ export default function VocabApp() {
               src={catImage}
               alt="HackPSU Cat"
               style={{
-                width: "300px",               
+                width: "300px",
                 height: "auto",
-                borderRadius: "16px",        
+                borderRadius: "16px",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                 marginBottom: "1rem"
               }}
             />
-
           </div>
         );
 
@@ -58,7 +56,15 @@ export default function VocabApp() {
         ) : (
           <div>
             {wordList.map((word) => (
-              <button key={word.word} className="option" onClick={() => setSelectedWord(word)}>
+              <button
+                key={word.word}
+                className="option"
+                onClick={() => {
+                  fetch(`/search?w=${word.word}`)
+                    .then(res => res.json())
+                    .then(data => setSelectedWord(data.result));
+                }}
+              >
                 {word.word}
               </button>
             ))}
@@ -78,15 +84,12 @@ export default function VocabApp() {
 
   return (
     <div className="container">
-      {/* 左側導覽按鈕區 */}
       <div className="sidebar">
         <button onClick={() => { setView("home"); setSelectedWord(null); }}>home</button>
         <button onClick={() => { setView("list"); setSelectedWord(null); }}>list</button>
         <button onClick={() => setView("insert")}>insert</button>
         <button onClick={() => setView("quiz")}>quiz</button>
       </div>
-
-      {/* 右側內容顯示區 */}
       <div className="main">
         {renderContent()}
       </div>
@@ -97,28 +100,17 @@ export default function VocabApp() {
 function InsertView({ onAdd }) {
   const [word, setWord] = useState("");
   const [type, setType] = useState("noun");
-  const [sentences, setSentences] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const types = [
     "noun", "pronoun", "verb", "adjective", "adverb",
     "preposition", "conjunction", "interjection"
   ];
 
-  const generateSentences = () => {
-    setLoading(true);
-    fetch(`/api/generate?word=${word}`)
-      .then((res) => res.json())
-      .then((data) => setSentences(data))
-      .finally(() => setLoading(false));
-  };
-
   const handleAdd = () => {
-    const newEntry = { word, type, sentences };
-    fetch("/api/add", {
+    fetch("/add_word", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newEntry),
+      body: JSON.stringify({ word, type })
     }).then(() => onAdd());
   };
 
@@ -136,16 +128,6 @@ function InsertView({ onAdd }) {
           ))}
         </select>
       </div>
-      <div>
-        <button onClick={generateSentences} disabled={loading}>
-          Generate Sentences
-        </button>
-        <ul>
-          {sentences.map((s, idx) => (
-            <li key={idx}>{s}</li>
-          ))}
-        </ul>
-      </div>
       <button onClick={handleAdd} className="primary">add</button>
     </div>
   );
@@ -156,9 +138,9 @@ function QuizView() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    fetch("/api/quiz")
-      .then((res) => res.json())
-      .then((data) => setQuiz(data));
+    fetch("/get_quiz")
+      .then(res => res.json())
+      .then(data => setQuiz(data.result));
   }, []);
 
   const current = quiz[index];

@@ -1,48 +1,39 @@
 import React, { useState, useEffect } from "react";
+import {get_list} from "./api";
 
-function ListView({ onAdd }) {
+function ListView() {
   const [wordList, setWordList] = useState([]);
-  const [selectedWord, setSelectedWord] = useState(null);
+//   const [selectedWord, setSelectedWord] = useState(false);
 
-  const types = [
-    "noun", "pronoun", "verb", "adjective", "adverb",
-    "preposition", "conjunction", "interjection"
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const result = await get_list('');
+        setWordList(result.result);
+        console.log(result);
+      } catch (error) {
+        console.error("Failed to fetch list:", error);
+      }
+    }
 
-    const handleAdd = () => {
-        fetch("/get_words").then(() => onAdd());
-    };
+    fetchData();
+  }, []);
 
-    return selectedWord ? (
-      <div className="card">
-        <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>Word: {selectedWord.word}</h3>
-        <p>Type: {selectedWord.type}</p>
-        <ul>
-          {selectedWord.sentences.map((s, idx) => (
-            <li key={idx}>{s}</li>
-          ))}
-        </ul>
-        <button style={{ marginTop: "1rem" }} onClick={() => setSelectedWord(null)}>
-          Back to list
-        </button>
-      </div>
-    ) : (
-      <div>
-        {wordList.map((word) => (
-          <button
-            key={word.word}
-            className="option"
-            onClick={() => {
-              fetch(`/search?w=${word.word}`)
-                .then(res => res.json())
-                .then(data => setSelectedWord(data.result));
-            }}
-          >
-            {word.word}
-          </button>
-        ))}
-      </div>
-    );
+  return (
+    <div className="p-4 space-y-4">
+      {wordList.map((record, idx) => (
+        <div key={idx} className="border border-gray-300 rounded-lg p-4 shadow-sm bg-white">
+          <h2 className="text-xl font-semibold text-indigo-600">{record.word}</h2>
+          <p className="text-sm text-gray-500 italic mb-2">Type: {record.type}</p>
+          <ul className="list-disc list-inside text-gray-700">
+            {record.sentences.map((s, i) => (
+              <li key={i}>{s}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default ListView;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import catImage from './meow_hackpsu.jpg';
 
-function HomeView({ onAdd }) {
+function HomeView() {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <h2 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "1rem" }}>

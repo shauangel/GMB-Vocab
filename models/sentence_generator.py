@@ -8,6 +8,7 @@ Responsibility:
 from openai import OpenAI
 import re
 import json
+import db_manager as db
 
 
 class SentenceGenerator:

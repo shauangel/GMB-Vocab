@@ -12,7 +12,6 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 uri = "mongodb+srv://shauanchi0315:gmbvocab@gmb-vocab.hu1jfgk.mongodb.net/?retryWrites=true&w=majority&appName=gmb-vocab"
-
 # Create a new client and connect to the server
 client = MongoClient(
     uri,
@@ -31,9 +30,19 @@ def insert_one_word(obj):
         print(e.__context__)
     return str(result)
 
+
 def get_all_words():
     cursor = WORD_COLLECTION.find({})
     result = [r for r in cursor]
+    return result
+
+
+def get_word_samples(N):
+    try:
+        random_docs = list(WORD_COLLECTION.aggregate([{"$sample": {"size": N}}]))
+    except Exception as e:
+        print(e.__context__)
+    result = [r for r in random_docs]
     return result
 
 

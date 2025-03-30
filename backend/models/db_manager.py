@@ -63,6 +63,15 @@ def get_word_samples(N):
     return result
 
 
+def get_word(word):
+    try:
+        cursor = WORD_COLLECTION.find({"word": word}, {"_id": 0})
+    except Exception as e:
+        print(e.__context__)
+    result = [r for r in cursor]
+    return result
+
+
 if __name__ == "__main__":
     test = {
         "word": "fish",

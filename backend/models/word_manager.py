@@ -41,7 +41,7 @@ def get_list(n):
 
 
 def get_word(word):
-    return
+    return db.get_word(word)
 
 
 if __name__ == "__main__":

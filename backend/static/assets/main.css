@@ -1,0 +1,27 @@
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.sidebar {
+  background-color: #e9ecef;
+  padding-top: 2rem;
+}
+
+.sidebar .nav-button {
+  border-radius: 999px;
+  margin-bottom: 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.welcome-box {
+  border: 2px solid purple;
+  border-radius: 0.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}

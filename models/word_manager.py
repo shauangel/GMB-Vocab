@@ -1,6 +1,5 @@
 """
 word_manager.py
-
 1. add word
 2. call sentence_generator
 3. store to MongoDB
@@ -24,10 +23,26 @@ def add_word(word, word_type):
     word_entry = {
         "word": word,
         "type": word_type,
-        "sentence": sentences
+        "sentences": sentences
     }
 
     # store MongoDB
     db.insert_one_word(word_entry)
 
     return word_entry
+
+
+if __name__ == "__main__":
+    print("Word Manager Model")
+    # add_word('cat', 'n')
+    # add_word('dog', 'n')
+    # add_word('mouse', 'n')
+    # add_word('hamster', 'n')
+    # add_word('run', 'v')
+    # add_word('invention', 'n')
+    # add_word('hacker', 'n')
+    # add_word('artist', 'n')
+    # add_word('beautiful', 'a')
+    # add_word('water', 'n')
+    # add_word('shiny', 'a')
+    # add_word('destiny', 'n')

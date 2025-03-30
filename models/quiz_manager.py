@@ -9,7 +9,18 @@ class QuizGenerator:
         return
 
     def generate_quiz(self):
-        word_list = db.get_all_words()
+        sample = db.get_word_samples(5)
+        for i in sample:
+            print(i)
+
+
+
+
+if __name__ == "__main__":
+    quiz = QuizGenerator()
+    quiz.generate_quiz()
+
+
 
 
 

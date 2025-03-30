@@ -1,5 +1,5 @@
 flask
 spacy
-openai
+openai==1.69.0
 requests
 pymongo

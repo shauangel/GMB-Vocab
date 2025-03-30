@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 import os
-import time
 import logging
 import sys
 from flask import Flask, jsonify, request
-from models import db_manager as db
+# blueprint register
+from text_analysis_api import text_analysis_api
+from data_manager_api import data_manager_api
+from website import website
 
 logging.basicConfig(stream=sys.stdout)
 app = Flask(__name__)
 
 
-@app.route('/hello', methods=['GET'])
+@app.route('/api/', methods=['GET'])
 def hello():
     return jsonify({"result": "hello"})
 

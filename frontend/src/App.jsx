@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import catImage from './meow_hackpsu.jpg';
+
 
 export default function VocabApp() {
   const [view, setView] = useState("home");
@@ -19,7 +21,25 @@ export default function VocabApp() {
   const renderContent = () => {
     switch (view) {
       case "home":
-        return <h2 style={{ fontSize: "20px", fontWeight: "bold" }}>Welcome to GMB-Vocabs</h2>;
+        return (
+          <div style={{ textAlign: "center" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "1rem" }}>
+              Welcome to GMB-Vocabs
+            </h2>
+            <img
+              src={catImage}
+              alt="HackPSU Cat"
+              style={{
+                width: "300px",               
+                height: "auto",
+                borderRadius: "16px",        
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                marginBottom: "1rem"
+              }}
+            />
+
+          </div>
+        );
 
       case "list":
         return selectedWord ? (

@@ -3,18 +3,32 @@ import os
 import logging
 import sys
 from flask import Flask, jsonify, request
+
+# CORS validation
+from flask_cors import CORS
+
 # blueprint register
-from text_analysis_api import text_analysis_api
-from data_manager_api import data_manager_api
-from website import website
+from gmb_api import gmb_api
+from gmb_webpage import gmb_webpage
 
 logging.basicConfig(stream=sys.stdout)
 app = Flask(__name__)
+blueprint_prefix = [
+    (gmb_api, "/api"),
+    (gmb_webpage, "/")
+]
 
 
-@app.route('/api/', methods=['GET'])
-def hello():
-    return jsonify({"result": "hello"})
+def register_blueprint(app):
+    for blueprint, prefix in blueprint_prefix:
+        app.register_blueprint(blueprint, url_prefix=prefix)
+    return app
+
+
+# set Flask application
+app = Flask(__name__)
+CORS(app)
+register_blueprint(app)
 
 
 if __name__ == "__main__":

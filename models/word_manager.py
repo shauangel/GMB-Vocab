@@ -4,8 +4,8 @@ word_manager.py
 2. call sentence_generator
 3. store to MongoDB
 """
-import db_manager as db
-from sentence_generator import SentenceGenerator
+import models.db_manager as db
+from models.sentence_generator import SentenceGenerator
 
 
 def add_word(word, word_type):
@@ -38,6 +38,10 @@ def get_list(n):
     else:
         data = db.get_all_words()
     return sorted(data, key=lambda x: x['word'])
+
+
+def get_word(word):
+    return
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 from flask import request, Blueprint, jsonify, render_template
-from models.word_manager import add_word
+from models.word_manager import add_word, get_list
 from models.quiz_manager import QuizGenerator
 
 # register api
@@ -7,7 +7,7 @@ gmb_api = Blueprint("gmb_api", __name__)
 
 
 # Add word
-@gmb_api.route('/add_word', method=['POST'])
+@gmb_api.route('/add_word', methods=['POST'])
 def add_word_api():
     # Get request
     data = request.get_json()
@@ -15,6 +15,23 @@ def add_word_api():
     try:
         # Insert new word
         resp = add_word(data['word'], data['type'])
+        del resp['_id']
+        print(resp)
+        response = {"result": resp}
+    except Exception as e:
+        response = {"error": e.__class__.__name__ + " : " + e.args[0]}
+    return jsonify(response)
+
+
+@gmb_api.route('/get_words', methods=['GET'])
+def get_words_api():
+    # Get request
+    alphabet = request.values.get('n')
+    print(alphabet)
+    try:
+        # Insert new word
+        resp = get_list(alphabet)
+
         print(resp)
         response = {"result": resp}
     except Exception as e:
@@ -23,7 +40,7 @@ def add_word_api():
 
 
 # Get quiz
-@gmb_api.route('/get_quiz', method=['GET'])
+@gmb_api.route('/get_quiz', methods=['GET'])
 def get_quiz_api():
     try:
         qm = QuizGenerator()

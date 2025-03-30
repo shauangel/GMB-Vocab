@@ -3,3 +3,4 @@ spacy
 openai==1.69.0
 requests
 pymongo
+certifi

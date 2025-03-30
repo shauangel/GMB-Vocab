@@ -5,11 +5,11 @@ word_manager.py
 2. call sentence_generator
 3. store to MongoDB
 """
+import db_manager as db
+from sentence_generator import SentenceGenerator
 
-from models import db_manager as db
-import models.sentence_generator as sg
 
-def add_word(word: str, word_type: str) -> dict:
+def add_word(word, word_type):
     """
     process:
     - insert word and type
@@ -17,16 +17,17 @@ def add_word(word: str, word_type: str) -> dict:
     - store to database
     """
     # call function
-    sentence = sg.generate_sentence(word, word_type)
+    sg = SentenceGenerator()
+    sentences = sg.get_single(word, 3)
 
     # set entry
     word_entry = {
         "word": word,
         "type": word_type,
-        "sentence": sentence
+        "sentence": sentences
     }
 
     # store MongoDB
-    db.insert_word(word_entry)
+    db.insert_one_word(word_entry)
 
     return word_entry

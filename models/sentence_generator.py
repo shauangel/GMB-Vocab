@@ -51,7 +51,6 @@ class SentenceGenerator:
 
             try:
                 data = json.loads(json_str)
-                print(data)
             except json.JSONDecodeError as e:
                 print("Failed to parse JSON:", e)
         return data

@@ -38,8 +38,13 @@ def get_all_words():
 
 
 def get_word_samples(N):
+    total = WORD_COLLECTION.count_documents({})
+    if N > total:
+        n = total
+    else:
+        n = N
     try:
-        random_docs = list(WORD_COLLECTION.aggregate([{"$sample": {"size": N}}]))
+        random_docs = list(WORD_COLLECTION.aggregate([{"$sample": {"size": n}}]))
     except Exception as e:
         print(e.__context__)
     result = [r for r in random_docs]

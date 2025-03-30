@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {get_list} from "./api";
+import {get_list} from "../api";
 
 function ListView() {
   const [wordList, setWordList] = useState([]);

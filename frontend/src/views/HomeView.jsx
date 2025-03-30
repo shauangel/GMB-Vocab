@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import catImage from './meow_hackpsu.jpg';
+import catImage from '../meow_hackpsu.jpg';
 
 function HomeView() {
     return (

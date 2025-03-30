@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import HomeView from "./HomeView";
-import QuizView from "./QuizView";
-import InsertView from "./InsertView";
-import ListView from "./ListView";
+import HomeView from "./views/HomeView";
+import QuizView from "./views/QuizView";
+import InsertView from "./views/InsertView";
+import ListView from "./views/ListView";
 
 export default function VocabApp() {
   const [view, setView] = useState("home");

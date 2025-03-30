@@ -42,7 +42,7 @@ export default function VocabApp() {
 
   {/* Main content: 3/4 of screen width, centered content */}
   <div className="flex-1 flex justify-center items-center bg-[#FAF4D3] p-8">
-    <div className="bg-white border-4 border-purple-500 rounded-xl w-full max-w-2xl min-h-[500px] max-h-[80vh] overflow-y-auto p-6">
+    <div className="bg-white border-4 border-purple-500 rounded-xl w-full max-w-2xl min-h-[90vh] max-h-[90vh] overflow-y-auto p-6">
       {renderContent()}
     </div>
   </div>

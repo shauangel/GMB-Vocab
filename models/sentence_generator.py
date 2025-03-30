@@ -8,7 +8,6 @@ Responsibility:
 from openai import OpenAI
 import re
 import json
-import db_manager as db
 
 
 class SentenceGenerator:
@@ -40,12 +39,13 @@ class SentenceGenerator:
 
     def get_multiple(self, word_list, k):
         prompt = (f"generate {k} sentence for each words: {word_list}"
-                  f"Response in a json format. No explanations, no introductions.")
+                  f"Response only in a json format. No explanations, no introductions.")
         response = self.client.responses.create(
             model="gpt-4o",
             input=prompt
         )
         match = re.search(r'```json\s*(.*?)\s*```', response.output_text, re.DOTALL)
+        print(response)
         if match:
             json_str = match.group(1)
 

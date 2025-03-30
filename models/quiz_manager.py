@@ -2,8 +2,8 @@
 Quiz generator model:
 1.
 """
-from sentence_generator import SentenceGenerator
-import db_manager as db
+from models.sentence_generator import SentenceGenerator
+import models.db_manager as db
 import random
 
 
@@ -31,7 +31,7 @@ class QuizGenerator:
                 if q not in w['sentences']:
                     temp['question'] = q
                     break
-            temp['question'].replace(f" {w['word']} ", "  _____ ")
+            temp['question'] = temp['question'].replace(f" {w['word']} ", "  _____ ")
 
             # Randomized quiz options
             idx = samples.index(w)

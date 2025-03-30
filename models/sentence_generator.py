@@ -3,7 +3,7 @@ Tool: OpenAI API
 
 Responsibility:
 * prompting for sentence generation
-* openAI credential
+* openAI credential (after deployment)
 """
 from openai import OpenAI
 import re
@@ -47,4 +47,7 @@ class SentenceGenerator:
 
 if __name__ == "__main__":
     sg = SentenceGenerator()
-    sg.get_multiple(['fish', 'dog', 'cat'], 3)
+    # s = sg.get_single('fish', 3)
+    # print(s)
+    s = sg.get_multiple(['fish', 'dog', 'cat'], 3)
+    print(s)
